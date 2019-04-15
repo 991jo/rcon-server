@@ -18,3 +18,10 @@ command.
 
 The RCON Specification can be found here:
 [https://developer.valvesoftware.com/wiki/Source_RCON_Protocol]
+
+# how to run the tests:
+
+~~~
+cd rcon_server
+python3 -m unittest
+~~~
