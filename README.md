@@ -6,7 +6,7 @@ A implementation of the RCON protocol on the server side.
 rcon-server is primarily designed as a tool for testing, e.g. with unit tests.
 Installing, running, updating, etc a regular srcds server might use a lot of
 resources.
->10GB of storage space per server is not uncommon.
+\>10GB of storage space per server is not uncommon.
 Also it is hard to get some results from an server in a test environment.
 A server only reports the amount of users which are on the server.
 Getting several people on a server for testing is pretty annoying and time
