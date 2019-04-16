@@ -15,7 +15,7 @@ class RCONPacket():
         """Creates a RCON packet."""
         self.id = id
         self.type = type
-        self.body = ""
+        self.body = body
         self.terminator = b"\x00"
 
     @classmethod
@@ -34,7 +34,8 @@ class RCONPacket():
             # check if the buffer is long enough to fit the body
             # first 4 bytes are for the size
             if len(buffer) >= 4 + size:
-                body = buffer[12:size+4].decode("ascii")
+                # +4 for the size, -2 for the 2 \x00 at the end
+                body = buffer[12:size+4-2].decode("ascii")
                 remaining_buffer = buffer[size+4:]
                 packet = cls(id, type, body)
                 return (packet, remaining_buffer)
@@ -78,9 +79,9 @@ class RCONPacket():
 
     @body.setter
     def body(self, value):
-        """Sets the body to the given value and updates the packet size.
+        """Sets the body to the given value.
         The body is a regular python string. It is not encoded as bytearray!
-        It also does not contain the Null-Termination."""
+        It also does not contain the null termination."""
         if not isinstance(value, str):
             raise ValueError("body needs to be a string.")
         else:
