@@ -1,12 +1,15 @@
 # Packet types
 
-from util import to_int32
+from util import to_int32, from_int32, check_int32
+
+#TODO add multi packet support
 
 class RCONPacket():
     PACKET_TYPES = {"SERVERDATA_AUTH" : 3,
                   "SERVERDATA_AUTH_RESPONSE" : 2,
                   "SERVERDATA_EXECCOMMAND" : 2,
                   "SERVERDATA_RESPONSE_VALUE" : 0}
+
 
     def __init__(self, id=0, type=0, body=""):
         """Creates a RCON packet."""
@@ -15,17 +18,29 @@ class RCONPacket():
         self.body = ""
         self.terminator = b"\x00"
 
-    def _check_int32(self, value):
-        """
-        :return: True if the value fits in a 32 bit signed int, False
+    @classmethod
+    def from_buffer(cls, buffer):
+        """Tries to build a RCONPacket from the given buffer.
+        :return: a tuple with an RCONPacket and the remaining buffer if a
+        whole packet was received. A tuple with None and the remaining buffer
         otherwise.
-        :param value: a int
+        :param buffer: The buffer as a bytestring.
         """
-        try:
-            to_int32(value)
-            return True
-        except Exception:
-            return False
+        if len(buffer) > 12:
+            size = from_int32(buffer[0:4])
+            id = from_int32(buffer[4:8])
+            type = from_int32(buffer[8:12])
+
+            # check if the buffer is long enough to fit the body
+            # first 4 bytes are for the size
+            if len(buffer) >= 4 + size:
+                body = buffer[12:size+4].decode("ascii")
+                remaining_buffer = buffer[size+4:]
+                packet = cls(id, type, body)
+                return (packet, remaining_buffer)
+
+        return (None, buffer)
+
 
     @property
     def type(self):
@@ -37,7 +52,7 @@ class RCONPacket():
         """Sets the packet type. raises a ValueError if the packet type is invalid"""
         if value not in RCONPacket.PACKET_TYPES.values():
             raise ValueError(f"{value!r} is not a valid value.")
-        if self._check_int32(value):
+        if check_int32(value):
             self._type = value
         else:
             raise ValueError(f"{value!r} is to large for a 32 bit signed int")
@@ -51,7 +66,7 @@ class RCONPacket():
     def id(self, value):
         """:param value: the new value for id. Has to fit into a 32 bit
         signed integer. Raises a ValueError if it does not fit."""
-        if self._check_int32(value):
+        if check_int32(value):
             self._id = value
         else:
             raise ValueError(f"{value!r} is to large for a 32 bit signed int")

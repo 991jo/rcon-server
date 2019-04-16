@@ -9,3 +9,23 @@ def to_int32(value):
     """
     # to_bytes raises an OverflowError when the value does not fit
     return value.to_bytes(4, byteorder="big", signed=True)
+
+def from_int32(value):
+    """
+    :return: A int from the given bytes.
+    :param value: a array or iterable of bytes
+    """
+
+    return int.from_bytes(value, byteorder="big", signed=True)
+
+def check_int32(value):
+    """
+    :return: True if the value fits in a 32 bit signed int, False
+    otherwise.
+    :param value: a int
+    """
+    try:
+        to_int32(value)
+        return True
+    except Exception:
+        return False
