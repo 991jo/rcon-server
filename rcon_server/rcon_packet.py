@@ -105,3 +105,5 @@ class RCONPacket():
 
         return size + id + type + self._body.encode("ascii") + self.terminator + self.terminator
 
+    def __repr__(self):
+        return f"<RCONPacket type={self.type}, id={self.id}, body={self.body}>"
