@@ -27,7 +27,9 @@ class RCONPacket():
         :param buffer: The buffer as a bytestring.
         """
         if len(buffer) > 12:
-            size = from_int32(buffer[0:4])
+            size = from_int32(buffer[0:4])  # TODO check for malformed packages
+                                            # size can not be < 10
+                                            # maybe raise Exception
             id = from_int32(buffer[4:8])
             type = from_int32(buffer[8:12])
 

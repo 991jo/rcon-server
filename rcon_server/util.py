@@ -8,7 +8,7 @@ def to_int32(value):
     :param value: int
     """
     # to_bytes raises an OverflowError when the value does not fit
-    return value.to_bytes(4, byteorder="big", signed=True)
+    return value.to_bytes(4, byteorder="little", signed=True)
 
 def from_int32(value):
     """
@@ -16,7 +16,7 @@ def from_int32(value):
     :param value: a array or iterable of bytes
     """
 
-    return int.from_bytes(value, byteorder="big", signed=True)
+    return int.from_bytes(value, byteorder="little", signed=True)
 
 def check_int32(value):
     """

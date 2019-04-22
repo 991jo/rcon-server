@@ -24,15 +24,15 @@ class TestRconPacket(unittest.TestCase):
 
         packet.body = "AAAA"
         self.assertEqual(b"AAAA", packet.msg()[12:-2])
-        self.assertEqual(b"\x00\x00\x00\x0E", packet.msg()[:4])
+        self.assertEqual(b"\x0E\x00\x00\x00", packet.msg()[:4])
         self.assertEqual(packet.terminator, packet.msg()[-1:])
         self.assertEqual(packet.terminator, packet.msg()[-2:-1])
 
         packet.id = 64
-        self.assertEqual(b"\x00\x00\x00\x40", packet.msg()[4:8])
+        self.assertEqual(b"\x40\x00\x00\x00", packet.msg()[4:8])
 
         packet.type = 2
-        self.assertEqual(b"\x00\x00\x00\x02", packet.msg()[8:12])
+        self.assertEqual(b"\x02\x00\x00\x00", packet.msg()[8:12])
 
     def test_wrong_packet_type(self):
         """
