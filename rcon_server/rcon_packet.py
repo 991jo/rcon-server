@@ -5,6 +5,18 @@ from util import to_int32, from_int32, check_int32
 #TODO add multi packet support
 
 class RCONPacket():
+
+    # The number 2 is there in two cases.
+    # this is intended by the protocol.
+    # AUTH_RESPONSE is only send server -> client
+    # and EXECCOMMAND is only send client -> server
+    # Therefore there should be no case in which
+    # a packet could be missunderstood due to the identical packet type
+    SERVERDATA_AUTH = 3
+    SERVERDATA_AUTH_RESPONSE = 2
+    SERVERDATA_EXECCOMMAND = 2
+    SERVERDATA_RESPONSE_VALUE = 0
+
     PACKET_TYPES = {"SERVERDATA_AUTH" : 3,
                   "SERVERDATA_AUTH_RESPONSE" : 2,
                   "SERVERDATA_EXECCOMMAND" : 2,
