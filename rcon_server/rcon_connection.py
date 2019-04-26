@@ -145,10 +145,10 @@ class RCONConnection(asyncio.Protocol):
 
         id = packet.id
         # send empty SERVERDATA_RESPONSE_VALUE
-        response_value = RCONPacket(id, RCONPacket.PACKET_TYPES["SERVERDATA_RESPONSE_VALUE"],
+        response_value = RCONPacket(id, RCONPacket.SERVERDATA_RESPONSE_VALUE,
                                     "")
         # send SERVERDATA_AUTH_RESPONSE
-        auth_response = RCONPacket(id, RCONPacket.PACKET_TYPES["SERVERDATA_AUTH_RESPONSE"],
+        auth_response = RCONPacket(id, RCONPacket.SERVERDATA_AUTH_RESPONSE,
                                    "")
         self.send_packet(response_value)
         self.send_packet(auth_response)
