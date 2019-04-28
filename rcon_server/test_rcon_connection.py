@@ -170,20 +170,40 @@ class RCONConnectionTest(unittest.TestCase):
         pass
 
     def test_mirrored_packet(self):
-        # TODO
-        pass
+        """For details regarding mirrored packets see [https://developer.valvesoftware.com/wiki/Source_RCON_Protocol#Multiple-packet_Responses]"""
+        self.test_password_successfull()
+        packet = RCONPacket(10, RCONPacket.SERVERDATA_RESPONSE_VALUE, "")
 
-    def test_password(self):
-        # TODO
-        pass
+        self.transport.write_to_test(packet.msg())
+        buffer = self.transport.read()
 
-    def test_password_disconnect_authenticated(self):
-        # TODO
-        pass
+        first_packet, buffer = RCONPacket.from_buffer(buffer)
+        second_packet, buffer = RCONPacket.from_buffer(buffer)
 
-    def test_password_unauthenticated(self):
-        # TODO
-        pass
+        self.assertEqual(buffer, b"")
 
-    def test_state(self):
-        pass
+        self.assertEqual(first_packet.id, 10)
+        self.assertEqual(first_packet.type, RCONPacket.SERVERDATA_RESPONSE_VALUE)
+        self.assertEqual(first_packet.body, "")
+
+        self.assertEqual(second_packet.id, 10)
+        self.assertEqual(second_packet.type, RCONPacket.SERVERDATA_RESPONSE_VALUE)
+        self.assertEqual(second_packet.body, "\x00\x00\x00\x01\x00\x00\x00\x00")
+
+    def test_close_connection(self):
+        """
+        Check if a connection is closed correctly.
+        This also checks the state of the connection.
+        """
+        self.assertEqual(self.connection.state, "unauthenticated")
+
+        # login to the server
+        self.test_password_successfull()
+
+        self.assertEqual(self.connection.state, "authenticated")
+        self.assertFalse(self.transport.closed)
+
+        self.connection.close_connection()
+
+        self.assertEqual(self.connection.state, "closed")
+        self.assertTrue(self.transport.closed)
