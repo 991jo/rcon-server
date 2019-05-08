@@ -1,7 +1,5 @@
 from util import to_int32, from_int32, check_int32
 
-#TODO add multi packet support
-
 class RCONPacket():
 
     # The number 2 is there in two cases.
