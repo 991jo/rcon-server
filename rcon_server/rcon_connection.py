@@ -88,7 +88,7 @@ class RCONConnection(asyncio.Protocol):
 
         if self._state == "unauthenticated":
             # First packet needs to be a authentication packet
-            if packet.type == RCONPacket.PACKET_TYPES["SERVERDATA_AUTH"]:
+            if packet.type == RCONPacket.SERVERDATA_AUTH:
                 if self._rcon_server.check_password(packet.body):
                     self._handle_correct_login(packet)
                 else:
@@ -100,7 +100,7 @@ class RCONConnection(asyncio.Protocol):
 
         elif self._state == "authenticated":
             # only valid packet shoud be an SERVERDATA_EXECCOMMAND
-            if packet.type == RCONPacket.PACKET_TYPES["SERVERDATA_EXECCOMMAND"]:
+            if packet.type == RCONPacket.SERVERDATA_EXECCOMMAND:
                 self._rcon_server.handle_execcommand(packet, self)
             else:
                 #invalid packet, close connection?
@@ -127,10 +127,10 @@ class RCONConnection(asyncio.Protocol):
         assert packet.body == ""
 
         first_packet = RCONPacket(packet.id,
-                                  RCONPacket.PACKET_TYPES["SERVERDATA_RESPONSE_VALUE"],
+                                  RCONPacket.SERVERDATA_RESPONSE_VALUE,
                                   body="")
         second_packet = RCONPacket(packet.id,
-                                   RCONPacket.PACKET_TYPES["SERVERDATA_RESPONSE_VALUE"],
+                                   RCONPacket.SERVERDATA_RESPONSE_VALUE,
                                    body="\x00\x00\x00\x01\x00\x00\x00\x00")
         self.send_packet(first_packet)
         self.send_packet(second_packet)
@@ -164,10 +164,10 @@ class RCONConnection(asyncio.Protocol):
 
         id = packet.id
         # send empty SERVERDATA_RESPONSE_VALUE
-        response_value = RCONPacket(id, RCONPacket.PACKET_TYPES["SERVERDATA_RESPONSE_VALUE"],
+        response_value = RCONPacket(id, RCONPacket.SERVERDATA_RESPONSE_VALUE,
                                     "")
         # send a SERVERDATA_AUTH_RESPONSE with id=-1
-        auth_response = RCONPacket(-1, RCONPacket.PACKET_TYPES["SERVERDATA_AUTH_RESPONSE"],
+        auth_response = RCONPacket(-1, RCONPacket.SERVERDATA_AUTH_RESPONSE,
                                    "")
         self.send_packet(response_value)
         self.send_packet(auth_response)

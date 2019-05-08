@@ -1,5 +1,3 @@
-# Packet types
-
 from util import to_int32, from_int32, check_int32
 
 #TODO add multi packet support
@@ -17,11 +15,8 @@ class RCONPacket():
     SERVERDATA_EXECCOMMAND = 2
     SERVERDATA_RESPONSE_VALUE = 0
 
-    PACKET_TYPES = {"SERVERDATA_AUTH" : 3,
-                  "SERVERDATA_AUTH_RESPONSE" : 2,
-                  "SERVERDATA_EXECCOMMAND" : 2,
-                  "SERVERDATA_RESPONSE_VALUE" : 0}
-
+    PACKET_TYPES = [SERVERDATA_AUTH, SERVERDATA_AUTH_RESPONSE,
+                    SERVERDATA_EXECCOMMAND, SERVERDATA_RESPONSE_VALUE]
 
     def __init__(self, id=0, type=0, body=""):
         """Creates a RCON packet."""
@@ -33,6 +28,7 @@ class RCONPacket():
     @classmethod
     def from_buffer(cls, buffer):
         """Tries to build a RCONPacket from the given buffer.
+        This method only builds one packet.
         :return: a tuple with an RCONPacket and the remaining buffer if a
         whole packet was received. A tuple with None and the remaining buffer
         otherwise.
@@ -42,6 +38,7 @@ class RCONPacket():
             size = from_int32(buffer[0:4])  # TODO check for malformed packages
                                             # size can not be < 10
                                             # maybe raise Exception
+            assert size >= 10, "Packet size can not be smaller than 10"
             id = from_int32(buffer[4:8])
             type = from_int32(buffer[8:12])
 
@@ -65,7 +62,7 @@ class RCONPacket():
     @type.setter
     def type(self, value):
         """Sets the packet type. raises a ValueError if the packet type is invalid"""
-        if value not in RCONPacket.PACKET_TYPES.values():
+        if value not in RCONPacket.PACKET_TYPES:
             raise ValueError(f"{value!r} is not a valid value.")
         if check_int32(value):
             self._type = value
@@ -103,7 +100,7 @@ class RCONPacket():
 
     @property
     def size(self):
-        """Returns the size of the packet."""
+        """Return the size of the packet."""
         # 4 ID
         # 4 Type
         # X body
@@ -112,7 +109,10 @@ class RCONPacket():
         return 4 + 4 + len(self._body) + 2*len(self.terminator)
 
     def msg(self):
-        """Returns the complete message"""
+        """
+        Returns a bytearray which may consist of multiple RCONPackets
+        directly after each other if the body is to large for one packet.
+        """
         size = to_int32(self.size)
         id = to_int32(self.id)
         type = to_int32(self._type)
