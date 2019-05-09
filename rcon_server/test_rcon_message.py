@@ -8,13 +8,13 @@ class RCONMessageTest(unittest.TestCase):
     def setUp(self):
         self.packet1 = RCONPacket(id=1,
                                       type=RCONPacket.SERVERDATA_RESPONSE_VALUE,
-                                      body="test")
+                                      body="test1")
         self.packet2 = RCONPacket(id=2,
                                       type=RCONPacket.SERVERDATA_RESPONSE_VALUE,
-                                      body="test")
+                                      body="test2")
         self.packet3 = RCONPacket(id=3,
                                       type=RCONPacket.SERVERDATA_RESPONSE_VALUE,
-                                      body="test")
+                                      body="test3")
 
     def test_init_empty(self):
         """Tests the empty constructor."""
@@ -73,3 +73,18 @@ class RCONMessageTest(unittest.TestCase):
         """Tests the msg function with multiple packets."""
         message = RCONMessage([self.packet1, self.packet2])
         self.assertEqual(message.msg(), self.packet1.msg() + self.packet2.msg())
+
+    def test_body_empty(self):
+        """Tests the body with an empty message."""
+        message = RCONMessage()
+        self.assertEqual("", message.body)
+
+    def test_body_empty(self):
+        """Tests the body with an one packet."""
+        message = RCONMessage(self.packet1)
+        self.assertEqual("test1", message.body)
+
+    def test_body_empty(self):
+        """Tests the body with multiple packets."""
+        message = RCONMessage([self.packet1, self.packet2])
+        self.assertEqual("test1test2", message.body)

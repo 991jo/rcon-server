@@ -32,3 +32,11 @@ class RCONMessage:
     def msg(self):
         """Return the whole message as a bytearray."""
         return b"".join(p.msg() for p in self.packets)
+
+    @property
+    def body(self):
+        """
+        Returns the body of the message. This is the body of all packets joined
+        together.
+        """
+        return "".join(p.body for p in self.packets)
