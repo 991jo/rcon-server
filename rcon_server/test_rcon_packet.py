@@ -102,5 +102,3 @@ class TestRconPacket(unittest.TestCase):
         self.assertEqual(packet.type, 0)
         self.assertEqual(packet.body, "testtestte")
         self.assertEqual(packet.size, 20)
-
-
