@@ -3,15 +3,22 @@ import socket
 from rcon_packet import RCONPacket
 
 class PasswordError(Exception):
+    """Exception which is thrown when the password is incorrect."""
     pass
 
 class ConnectionClosedError(Exception):
+    """Exception which is thrown when the connection is closed"""
     pass
 
 class PacketIDMissmatch(Exception):
+    """Exception thrown when the ID of the received packet does not match."""
     pass
 
 class PacketTypeMissmatch(Exception):
+    """
+    Exception thrown when the type of the received packet does not match
+    to what was expected.
+    """
     pass
 
 class RCONClient():
@@ -21,6 +28,9 @@ class RCONClient():
         Initializes the RCONClient with the given *ip*, *port*, and *password*.
         The connect and login methods need to be called before commands can be
         send.
+        :param ip: str, an ip or domain name to connect to
+        :param port: int, a tcp port to connect to
+        :param password: str, the rcon password to use
         """
         self.next_id = 1
         self._ip = ip
@@ -51,8 +61,10 @@ class RCONClient():
                 return packet
 
     def login(self):
-        """Sends the rcon password.
-        This raises a PasswordError when the password is wrong."""
+        """
+        Sends the rcon password.
+        This raises a PasswordError when the password is wrong.
+        """
         auth_id = self.next_id
         login_packet = RCONPacket(auth_id,
                                   RCONPacket.SERVERDATA_AUTH,
@@ -82,19 +94,27 @@ class RCONClient():
         # be necessary
 
     def connect(self):
-        """Connects to the server.
-        This may raise an Error if the connections fails."""
+        """
+        Connects to the server.
+        This may raise an Error if the connections fails.
+        """
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._socket.connect((self._ip, self._port))
 
     def disconnect(self):
-        """Disconnects from the server.
-        This may raise an Error if closing the connection fails."""
+        """
+        Disconnects from the server.
+        This may raise an Error if closing the connection fails.
+        """
         self._socket.close()
 
     def send_command(self, command):
-        """Sends the given command to the server and returns the output as a
-        string."""
+        """
+        Sends the given command to the server and returns the output as a
+        string.
+
+        :param command: str, the command to send.
+        """
         command_id = self.next_id
         self.next_id += 1
         check_id = self.next_id
@@ -122,7 +142,7 @@ class RCONClient():
             elif packet.id == check_id and packet.body == "":
                 # final packet received
                 # receive the 0x0000 0001 0000 0000 packet
-                drop_packet = self.recv_packet()
+                _ = self.recv_packet()
                 break
 
         return response
