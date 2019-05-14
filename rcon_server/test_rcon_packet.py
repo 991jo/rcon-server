@@ -1,7 +1,7 @@
 import unittest
 
-from rcon_packet import RCONPacket
-from util import to_int32
+from .rcon_packet import RCONPacket
+from .util import to_int32
 
 class TestRconPacket(unittest.TestCase):
 

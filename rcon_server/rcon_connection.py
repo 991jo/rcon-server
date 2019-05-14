@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from rcon_packet import RCONPacket
+from .rcon_packet import RCONPacket
 
 logger = logging.getLogger(name="RCONServer")
 

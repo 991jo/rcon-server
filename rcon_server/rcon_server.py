@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from rcon_connection import RCONConnection
+from .rcon_connection import RCONConnection
 
 logger = logging.getLogger(name="RCONServer")
 logger.setLevel(logging.DEBUG)

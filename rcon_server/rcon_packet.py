@@ -1,4 +1,4 @@
-from util import to_int32, from_int32, check_int32
+from .util import to_int32, from_int32, check_int32
 
 class RCONPacket():
 

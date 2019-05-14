@@ -1,6 +1,6 @@
 import socket
 
-from rcon_packet import RCONPacket
+from .rcon_packet import RCONPacket
 
 class PasswordError(Exception):
     """Exception which is thrown when the password is incorrect."""

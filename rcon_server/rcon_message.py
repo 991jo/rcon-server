@@ -1,4 +1,4 @@
-from rcon_packet import RCONPacket
+from .rcon_packet import RCONPacket
 
 class RCONMessage:
     """

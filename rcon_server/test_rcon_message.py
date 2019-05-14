@@ -1,7 +1,7 @@
-from rcon_packet import RCONPacket
-from rcon_message import RCONMessage
-
 import unittest
+
+from .rcon_packet import RCONPacket
+from .rcon_message import RCONMessage
 
 class RCONMessageTest(unittest.TestCase):
 

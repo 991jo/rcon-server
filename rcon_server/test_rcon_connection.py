@@ -1,8 +1,8 @@
 import unittest
 
-from rcon_server import RCONServer
-from rcon_connection import RCONConnection
-from rcon_packet import RCONPacket
+from .rcon_server import RCONServer
+from .rcon_connection import RCONConnection
+from .rcon_packet import RCONPacket
 
 test_password = "test"
 
