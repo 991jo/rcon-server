@@ -19,6 +19,12 @@ command.
 The RCON Specification can be found here:
 [https://developer.valvesoftware.com/wiki/Source_RCON_Protocol]
 
+# How to install
+
+~~~
+pip install rcon-server
+~~~
+
 # how to run the tests:
 
 ~~~
