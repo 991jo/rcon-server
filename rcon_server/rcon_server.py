@@ -5,9 +5,9 @@ from .rcon_connection import RCONConnection
 
 logger = logging.getLogger(name="RCONServer")
 logger.setLevel(logging.DEBUG)
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
-logger.addHandler(console_handler)
+#console_handler = logging.StreamHandler()
+#console_handler.setLevel(logging.DEBUG)
+#logger.addHandler(console_handler)
 
 class RCONServer:
     def __init__(self, bind=("localhost",27015), password=None):
@@ -62,7 +62,8 @@ class RCONServer:
         async with server:
             logger.info("starting server")
             for socket in server.sockets:
-                logger.info("listening on %s:%s" % socket.getsockname())
+                # [:2] needed to remove the additional fields of INET6 sockets
+                logger.info("listening on %s:%s" % socket.getsockname()[:2])
             await server.serve_forever()
 
     def handle_execcommand(self, packet, connection):
@@ -75,6 +76,6 @@ class RCONServer:
         raise NotImplementedError("This method is not implemented! A subclass "
                                   "must implement this method!")
 
-if __name__ == "__main__":
-    server = RCONServer()
-    asyncio.run(server.listen())
+#if __name__ == "__main__":
+#    server = RCONServer()
+#    asyncio.run(server.listen())

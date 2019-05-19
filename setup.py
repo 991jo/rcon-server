@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rcon_server",
-    version="0.1.1",
+    version="0.1.2",
     author="Johannes Erwerle",
     author_email="johannes.erwerle@googlemail.com",
     description="a server side implementaiton of the RCON Protocol.",
