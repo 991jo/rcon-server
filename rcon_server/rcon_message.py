@@ -1,5 +1,6 @@
 from .rcon_packet import RCONPacket
 
+
 class RCONMessage:
     """
     A RCONMessage represents a message which may consist of multiple packets.
@@ -46,7 +47,7 @@ class RCONMessage:
 
             for i, p in enumerate(packet[1:]):
                 assert p.type == type, "type of packet 0 %s and packet %d %s dont match" % (packet[0], i, p)
-                assert p.id == id , "id of packet 0 %s and packet %d %s dont match" % (packet[0], i, p)
+                assert p.id == id, "id of packet 0 %s and packet %d %s dont match" % (packet[0], i, p)
 
             self.packets = packet
 
@@ -131,3 +132,7 @@ class RCONMessage:
     def size(self):
         """The sum of all packets in this message."""
         return sum(p.size for p in self.packets)
+
+    def __repr__(self):
+        return f"<RCONMessage type={self.type}, id={self.id},"\
+               f"body={self.body}, num_packets={len(self.packets)}>"
